@@ -7,7 +7,13 @@ echo "=== Analisi Configurazioni Kubernetes & AWS ==="
 echo
 
 # Profili AWS
-aws_profiles=$(grep -c '^\[.*\]' "$AWS_CONFIG" 2>/dev/null || echo 0)
+#aws_profiles=$(grep -c '^\[.*\]' "$AWS_CONFIG" 2>/dev/null || echo 0)
+aws_profiles=$(
+  grep -E '^\[ *(profile [^]]+|default) *\]' "$AWS_CONFIG" \
+  | grep -v '^\s*#' \
+  | wc -l
+)
+
 echo "Profili AWS (in ~/.aws/config): $aws_profiles"
 
 # Cluster totali
